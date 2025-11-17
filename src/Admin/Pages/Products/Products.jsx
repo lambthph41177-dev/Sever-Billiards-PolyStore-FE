@@ -40,19 +40,19 @@ const Products = () => {
     mutate(idDelete);
     setIsModalOpen(false);
   };
-  const onShowSizeChange = (current, pageSize) => {
+  const onShowSizeChange = (current) => {
     const searchParams = new URLSearchParams(location.search);
     searchParams.set("page", current);
     navigate(`${location.pathname}?${searchParams.toString()}`);
   };
-  const handleSearch = (e) => {
-    if (e.key === "Enter") {
-      const value = e.target.value.trim();
-      const updateValue = new URLSearchParams(searchParam.toString());
-      updateValue.set("search", value);
-      navigate(`?${updateValue.toString()}`);
-    }
-  };
+  // const handleSearch = (e) => {
+  //   if (e.key === "Enter") {
+  //     const value = e.target.value.trim();
+  //     const updateValue = new URLSearchParams(searchParam.toString());
+  //     updateValue.set("search", value);
+  //     navigate(`?${updateValue.toString()}`);
+  //   }
+  // };
   const handleSort = () => {
     const updatedParams = new URLSearchParams(searchParam.toString());
     updatedParams.delete("sort");
@@ -86,7 +86,7 @@ const Products = () => {
                   <form>
                     <div className="row g-3">
                       <div className="col-xxl-5 col-sm-5">
-                        <div className="search-box">
+                        {/* <div className="search-box">
                           <input
                             type="text"
                             className="form-control search"
@@ -94,7 +94,7 @@ const Products = () => {
                             onKeyDown={(e) => handleSearch(e)}
                           />
                           <i className="ri-search-line search-icon" />
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     {/*end row*/}
@@ -154,13 +154,14 @@ const Products = () => {
                             </Link>
                           </td>
 
-                          <td>{item?.caterori.name}</td>
+                          <td>{item?.caterori?.name}</td>
                           <td className="amount">
                             {<FormatPrice price={item.price} />}
                           </td>
                           <td>
                             <Image
                               width={200}
+                             style={{maxHeight:"200px"}}
                               src={item.imageUrl}
                               alt="product"
                             />
