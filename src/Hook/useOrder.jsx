@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import {
   detailOrder,
   getOrdersAdmin,
-  orderUpdate,
   udateStatusOrder,
 } from "../Apis/Api.jsx";
 
@@ -59,7 +58,7 @@ const useOrderUpdate = () => {
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation({
     mutationFn: ({ id, data }) => orderUpdate(id, data),
-    onSuccess: () => {
+    onSuccess: () => { 
       queryClient.invalidateQueries({ queryKey: ["order"] });
     },
     onError: (error) => {
@@ -72,7 +71,6 @@ export {
   UseDetailOrder,
   useOrder,
   useOrderUpdate,
-  useStatusOrder,
   useStatusOrderAdmin,
 
 };
