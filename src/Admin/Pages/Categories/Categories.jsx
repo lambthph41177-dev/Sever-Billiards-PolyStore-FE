@@ -9,6 +9,8 @@ import {
 } from "../../../Hook/useCategory";
 
 const Categories = () => {
+  const dataString = localStorage.getItem("user");
+  const data = JSON.parse(dataString);
   const { category, isCategory } = useCategory();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [idDelete, setIdDelete] = useState("");
@@ -48,7 +50,7 @@ const Categories = () => {
   const handleOk = () => {
     mutate(idDelete);
     setIdDelete("");
-    setIsModalOpen(false)
+    setIsModalOpen(false);
   };
 
   const handleCancelDetail = () => {
@@ -175,14 +177,16 @@ const Categories = () => {
                                 <i className="ri-pencil-fill fs-16" />
                               </div>
                             </li>
-                            <li className="list-inline-item">
-                              <div
-                                className="text-danger d-inline-block remove-item-btn"
-                                onClick={() => showModal(item._id)}
-                              >
-                                <i className="ri-delete-bin-5-fill fs-16"></i>
-                              </div>
-                            </li>
+                            {data.role === "manage" && (
+                              <li className="list-inline-item">
+                                <div
+                                  className="text-danger d-inline-block remove-item-btn"
+                                  onClick={() => showModal(item._id)}
+                                >
+                                  <i className="ri-delete-bin-5-fill fs-16"></i>
+                                </div>
+                              </li>
+                            )}
                           </ul>
                         </td>
                       </tr>
@@ -260,7 +264,7 @@ const Categories = () => {
                 <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
                   <h4>Are you sure ?</h4>
                   <p className="text-muted mx-4 mb-0">
-                    Are you sure you want to remove this record ?
+                    Bạn có chắc muốn xóa không
                   </p>
                 </div>
               </div>
