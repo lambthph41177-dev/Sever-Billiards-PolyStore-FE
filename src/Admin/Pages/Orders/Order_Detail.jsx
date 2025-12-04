@@ -10,6 +10,7 @@ const Order_Detail = () => {
   const [isOpenOrder, setIsOpenOrder] = useState(false);
   const { isLoading: isLoadingorder, mutate } = useStatusOrderAdmin(id);
   const { data, isLoading } = UseDetailOrder(id);
+  console.log(data);
   const [idOpen, setIdOpen] = useState("");
   const [status, setStatus] = useState();
   const { handleSubmit } = useForm();
@@ -53,17 +54,8 @@ const Order_Detail = () => {
             <div className="card-header">
               <div className="d-flex align-items-center">
                 <h5 className="card-title flex-grow-1 items-center mb-0 text-uppercase">
-                  Order #{data?._id || "N/A"}
+                  Mã đơn hàng #{data?.madh || "N/A"}
                 </h5>
-                <div className="flex-shrink-0">
-                  <a
-                    href="apps-invoices-details.html"
-                    className="px-3 py-2 rounded-md btn-success btn-sm"
-                  >
-                    <i className="ri-download-2-fill align-middle me-1" />
-                    Invoice
-                  </a>
-                </div>
               </div>
             </div>
             <div className="card-body">
@@ -71,16 +63,16 @@ const Order_Detail = () => {
                 <table className="table table-nowrap align-middle table-borderless mb-0">
                   <thead className="table-light text-muted">
                     <tr>
-                      <th scope="col">Product Details</th>
+                      <th scope="col">Chi tiết sản phẩm</th>
                       <th scope="col" style={{ textAlign: "center" }}>
-                        Item Price
+                        Giá
                       </th>
                       <th scope="col" style={{ textAlign: "center" }}>
-                        Quantity
+                        Số lượng
                       </th>
 
                       <th scope="col" className="text-end">
-                        Total Amount
+                        Tổng tiền
                       </th>
                     </tr>
                   </thead>
@@ -99,22 +91,24 @@ const Order_Detail = () => {
                             <div className="flex-grow-1 ms-3">
                               <h5 className="fs-15">
                                 <div>
-                                  {item.productId.name.length > 20
-                                    ? item.productId.name.slice(0, 40) + "..."
-                                    : item.productId.name}
+                                  {item.name.length > 20
+                                    ? item.name.slice(0, 40) + "..."
+                                    : item.name}
                                 </div>
                               </h5>
                             </div>
                           </div>
                         </td>
                         <td className="text-center">
-                          {<FormatPrice price={item.productId.price} />}
+                          {<FormatPrice price={item.priceAfterDis} />}
                         </td>
                         <td className="text-center">{item.quantity}</td>
                         <td className="fw-medium text-end">
                           {
                             <FormatPrice
-                              price={item.productId.price * item.quantity}
+                              price={
+                                item.priceAfterDis * item.quantity
+                              }
                             />
                           }
                         </td>
@@ -127,8 +121,14 @@ const Order_Detail = () => {
                         <table className="table table-borderless mb-0">
                           <tbody>
                             <tr className="border-top border-top-dashed">
-                              <th scope="row">Total :</th>
-                              <th className="text-end">
+                              <th scope="row"> Mã giảm giá :</th>
+                              <th className="text-end ">
+                                {data?.voucherId?.discount || 0} %
+                              </th>
+                            </tr>
+                            <tr className="border-top border-top-dashed">
+                              <th scope="row">Tổng :</th>
+                              <th className="text-end text-xl">
                                 {<FormatPrice price={data.totalPrice} />}
                               </th>
                             </tr>
@@ -145,7 +145,9 @@ const Order_Detail = () => {
           <div className="card">
             <div className="card-header">
               <div className="d-sm-flex align-items-center">
-                <h5 className="card-title flex-grow-1 mb-0">Order Status</h5>
+                <h5 className="card-title flex-grow-1 mb-0">
+                  Trạng thái đơn hàng
+                </h5>
                 {data.status !== "Hủy" && (
                   <div className="flex mt-2 mt-sm-0 gap-2">
                     <div
@@ -154,7 +156,7 @@ const Order_Detail = () => {
                       onClick={() => handleOpen(data)}
                     >
                       <i className="ri-map-pin-line align-middle me-1" />
-                      Order Status
+                      Trạng thái đơn hàng
                     </div>
                     {data.status == "Xác nhận" && (
                       <div
@@ -163,7 +165,7 @@ const Order_Detail = () => {
                         style={{ color: "white !important" }}
                       >
                         <i className="mdi mdi-archive-remove-outline align-middle me-1" />
-                        Cancel Order
+                        Hủy đơn hàng
                       </div>
                     )}
                   </div>
@@ -215,18 +217,39 @@ const Order_Detail = () => {
             <div className="card-header">
               <h5 className="card-title mb-0">
                 <i className="ri-map-pin-line align-middle me-1 text-muted" />
-                Shipping Address
+                Địa chỉ giao hàng
               </h5>
             </div>
             <div className="card-body">
               <ul className="list-unstyled vstack gap-2 fs-15 mb-0">
-                <li className=" fs-14">Name : {data.customerName}</li>
-                <li>Phone : {data.phone}</li>
-                <li>Address : {data.address}</li>
+                <li className=" fs-14">Tên người mua : {data.customerName}</li>
+                <li>Số điện thoại : {data.phone}</li>
+                <li>Địa chỉ : {data.address}</li>
+                <li>Ghi chú : {data.note}</li>
+              </ul>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-header">
+              <h5 className="card-title mb-0">
+                <i className="ri-map-pin-line align-middle me-1 text-muted" />
+                Thông tin thanh toán
+              </h5>
+            </div>
+            <div className="card-body">
+              <ul className="list-unstyled vstack gap-2 fs-15 mb-0">
+                <li className=" fs-14">
+                  Hình thức thanh toán : {data.payment}
+                </li>
+                <li>
+                  Trạng thái thanh toán:{" "}
+                  {data.isPaymentSucces ? "Đã thanh toán" : "Chưa Thanh Toán"}
+                </li>
               </ul>
             </div>
           </div>
         </div>
+
         {/*end col*/}
       </div>
       <Modal
@@ -263,12 +286,12 @@ const Order_Detail = () => {
         open={isOpenOrder}
         onOk={handleSubmit(onSubmitUpdate)}
         onCancel={handleCancel}
-        title="Order status"
+        title="Trạng thái đơn hàng"
         width={800}
         // className="modal fade zoomIn"
       >
         <>
-          <div className="">Are you sure to cancel this order?</div>
+          <div className="">Bạn có chắc chắn muốn hủy đơn hàng này không?</div>
         </>
       </Modal>
     </div>
