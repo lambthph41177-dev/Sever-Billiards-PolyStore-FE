@@ -91,12 +91,10 @@ export const categoryForcedelete = async (id) => {
   const res = await Axios.delete(`/category/${id}`);
   return res.data;
 };
-export const user = async (page, filter = {}) => {
+export const user = async (page, search = "") => {
   const param = new URLSearchParams();
   param.append("page", page);
-  if (filter.search) param.append("email", filter.search);
-  if (filter.role !== undefined && filter.role !== "")
-    param.append("role", filter.role);
+  if (search) param.append("search", search);
   const res = await Axios.get(`/user?${param.toString()}`);
   return res.data;
 };
@@ -118,7 +116,7 @@ export const addUsers = async (data) => {
   return res.data;
 };
 export const updateUsers = async (id, data) => {
-  const res = await Axios.put(`api/users/${id}`, data);
+  const res = await Axios.patch(`/user/${id}`, data);
   return res.data;
 };
 export const getOrdersAdmin = async (page, filters = {}) => {
@@ -175,4 +173,27 @@ export const resetpassword = async (data) => {
   return res.data;
 };
 
+export const getVouchers = async () => {
+  const res = await Axios.get(`/vouchers`);
+  return res.data;
+};
 
+export const getVoucherDetail = async (id) => {
+  const res = await Axios.get(`/vouchers/${id}`);
+  return res.data;
+};
+
+export const createVoucher = async (data) => {
+  const res = await Axios.post(`/voucher`, data);
+  return res.data;
+};
+
+export const updateVoucher = async (id, data) => {
+  const res = await Axios.patch(`/voucher/${id}`, data);
+  return res.data;
+};
+
+export const deleteVoucher = async (id) => {
+  const res = await Axios.delete(`/voucher/${id}`);
+  return res.data;
+};
