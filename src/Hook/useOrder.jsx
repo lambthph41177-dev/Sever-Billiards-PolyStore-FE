@@ -58,7 +58,7 @@ const useOrderUpdate = () => {
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation({
     mutationFn: ({ id, data }) => orderUpdate(id, data),
-    onSuccess: () => { 
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["order"] });
     },
     onError: (error) => {
